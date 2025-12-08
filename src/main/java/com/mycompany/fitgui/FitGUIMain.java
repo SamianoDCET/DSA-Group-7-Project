@@ -12,6 +12,7 @@ public class FitGUIMain {
     public static void main(String[] args){ 
        FitGUI app = new FitGUI();
        app.setVisible(false);
+       
        UserAccount.register("test", "1234"); 
        new LoginPage(); 
     }
