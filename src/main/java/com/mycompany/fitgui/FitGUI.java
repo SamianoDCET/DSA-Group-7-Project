@@ -24,7 +24,7 @@ public class FitGUI extends JFrame {
 
         // ====== WORKOUT PANEL ======
         JPanel workoutPanel = new JPanel(new BorderLayout());
-        workoutPanel.setBorder(BorderFactory.createTitledBorder("Workout Tracker"));
+        workoutPanel.setBorder(BorderFactory.createTitledBorder("Workout Log"));
 
         workoutLog = new JTextArea();
         workoutLog.setEditable(false);
@@ -43,18 +43,36 @@ public class FitGUI extends JFrame {
         addWorkoutBtn.addActionListener(e -> {
             String workout = workoutInput.getText().trim();
             String durationText = durationInput.getText().trim();
-            
-            if (!workout.isEmpty() && !durationText.isEmpty()) {
-                try {
-                    int duration = Integer.parseInt(durationText);
-                    workouts.add(new WorkOut(workout, duration));
-                    workoutLog.append("• " + workout + " - " + duration + " mins\n");
-                    workoutInput.setText("");
-                    durationInput.setText("");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Please enter a valid number for duration.");
-                }
+
+            if (workout.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Please enter a workout name.", 
+                    "Warning", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            if (durationText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Please enter workout duration.", 
+                    "Warning", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                int duration = Integer.parseInt(durationText);
+                workouts.add(new WorkOut(workout, duration));
+                workoutLog.append("• " + workout + " - " + duration + " mins\n");
+                workoutInput.setText("");
+                durationInput.setText("");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Duration must be a valid number.", 
+                    "Warning", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
             updateProgress();
         });
 
@@ -73,13 +91,21 @@ public class FitGUI extends JFrame {
 
         addMealBtn.addActionListener(e -> {
             String meal = mealInput.getText().trim();
-            if (!meal.isEmpty()) {
+
+                if (meal.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Please enter a meal before adding.", 
+                        "Warning", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 meals.add(meal);
                 mealLog.append("• " + meal + "\n");
                 mealInput.setText("");
-            }
-            updateProgress();
-        });
+
+                updateProgress();
+            });
 
         mealPanel.add(new JScrollPane(mealLog), BorderLayout.CENTER);
         mealPanel.add(mealInput, BorderLayout.NORTH);
